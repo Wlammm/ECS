@@ -146,9 +146,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentArray.h" />
+    <ClInclude Include="ComponentManager.hpp" />
     <ClInclude Include="ECSAdmin.h" />
     <ClInclude Include="ObjectPool.hpp" />
     <ClInclude Include="SSet.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
