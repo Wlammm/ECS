@@ -5,7 +5,10 @@
 #include <typeindex>
 #include <map>
 #include <iostream>
+#include "ObjectPool.hpp"
 #include "SSet.h"
+#include <any>
+#include "Component.h"
 
 using Entity = unsigned int;
 #define MaxComponentCount 128
@@ -21,29 +24,28 @@ public:
 	Entity CreateEntity();
 
 	template<typename T>
-	void AddComponent(const Entity& anEntity, T& aComponent);
+	void AddComponent(const Entity& anEntity, Component* aComponent);
 
-	template<typename T>
-	T* GetComponent(const Entity& anEntity);
+	//template<typename T>
+	//T* GetComponent(const Entity& anEntity);
 
 private:
 	std::vector<Entity> myActiveEntities;
-	//std::map<std::type_index, std::pair<int, void*>> myComponents;
-	std::map<std::type_index, CU::SSet<void*>> myComponents;
+	std::map<std::type_index, CU::ObjectPool<Component*>> myComponents;
 
 	Entity myNextEntityID = 0;
 };
 
 template<typename T>
-inline void ECSAdmin::AddComponent(const Entity& anEntity, T& aComponent)
+inline void ECSAdmin::AddComponent(const Entity& anEntity, Component* aComponent)
 {
 	std::type_index typeID = typeid(T);
 
-	if (myComponents[typeID].Empty())
+	if (!myComponents[typeID].IsInitialized())
 	{
-		myComponents[typeID] = CU::SSet<void*>();
+		CU::ObjectPool<Component*> pool = CU::ObjectPool<Component*>(MaxComponentCount);
+		myComponents[typeID] = pool;
 	}
 
-	myComponents[typeID].Insert(static_cast<void*>(&aComponent));
-	// .Insert(aComponent);
+	myComponents[typeID].GetNextFree()->Value() = aComponent;
 }

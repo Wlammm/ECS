@@ -1,13 +1,21 @@
 #include <iostream>
 #include "ECSAdmin.h"
+#include "ObjectPool.hpp"
+
+#include "Component.h"
+
+class TEstCOmponent : public Component
+{
+
+};
 
 int main()
 {
 	ECSAdmin admin;
 
-	int i = 3;
-	admin.AddComponent<int>(0, i);
+	TEstCOmponent* comp{};
 
+	admin.AddComponent<int>(0, comp);
 
 	return 0;
 }

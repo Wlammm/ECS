@@ -1,0 +1,5 @@
+﻿  ECSAdmin.cpp
+  Main.cpp
+  Generating Code...
+C:\Users\willi\Documents\GitHub\Engine\ECS\ECS Development\ObjectPool.hpp(59): warning C4715: 'CommonUtilities::ObjectPool<Component *>::GetNextFree': not all control paths return a value
+  ECS Development.vcxproj -> C:\Users\willi\Documents\GitHub\Engine\ECS\x64\Debug\ECS Development.exe
