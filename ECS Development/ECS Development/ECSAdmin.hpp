@@ -105,6 +105,8 @@ public:
 		mySystemManager->SetSignature<T>(aSignature);
 	}
 
+	void Update();
+
 private:
 	static ECSAdmin* ourInstance;
 

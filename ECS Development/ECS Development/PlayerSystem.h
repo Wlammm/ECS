@@ -5,5 +5,6 @@
 class PlayerSystem : public System
 {
 public:
-	void Update();
+	void Init() override;
+	void Update() override;
 };

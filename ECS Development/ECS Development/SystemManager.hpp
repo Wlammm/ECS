@@ -10,7 +10,6 @@
 class SystemManager
 {
 public:
-
 	template<typename T>
 	T* RegisterSystem()
 	{
@@ -20,6 +19,9 @@ public:
 
 		T* system = new T();
 		mySystems.insert({ typeName, system });
+		
+		system->Init();
+
 		return system;
 	}
 
@@ -61,8 +63,12 @@ public:
 		}
 	}
 
+	const std::unordered_map<std::string, System*>& GetSystems()
+	{
+		return mySystems;
+	}
+
 private:
 	std::unordered_map<std::string, Signature> mySignatures;
 	std::unordered_map<std::string, System*> mySystems;
-
 };

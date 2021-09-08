@@ -66,7 +66,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\System</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

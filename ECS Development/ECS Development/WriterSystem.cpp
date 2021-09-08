@@ -5,7 +5,10 @@
 
 void WriterSystem::Init()
 {
-
+	ECSAdmin* admin = ECSAdmin::GetInstance();
+	Signature signature;
+	signature.set(admin->GetComponentType<Writer>());
+	admin->SetSystemSignature<WriterSystem>(signature);
 }
 
 void WriterSystem::Update()

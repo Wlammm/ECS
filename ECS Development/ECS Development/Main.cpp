@@ -6,30 +6,27 @@
 #include "PlayerComponent.h"
 #include "PlayerSystem.h"
 
+void RegisterSystems()
+{
+	ECSAdmin* admin = ECSAdmin::GetInstance();
+	admin->RegisterSystem<PlayerSystem>();
+	admin->RegisterSystem<WriterSystem>();
+}
+
+void RegisterComponents()
+{
+	ECSAdmin* admin = ECSAdmin::GetInstance();
+	admin->RegisterComponent<Writer>();
+	admin->RegisterComponent<Player>();
+}
+
 int main()
 {
 	ECSAdmin* admin = new ECSAdmin();
 	admin->Init();
 
-	admin->RegisterComponent<Writer>();
-	admin->RegisterComponent<Player>();
-
-	auto writerSystem = admin->RegisterSystem<WriterSystem>();
-	{
-		Signature signature;
-		signature.set(admin->GetComponentType<Writer>());
-		admin->SetSystemSignature<WriterSystem>(signature);
-	}
-	writerSystem->Init();
-
-	auto playerSystem = admin->RegisterSystem<PlayerSystem>();
-	{
-		Signature signature;
-		signature.set(admin->GetComponentType<Player>());
-		signature.set(admin->GetComponentType<Writer>());
-		admin->SetSystemSignature<PlayerSystem>(signature);
-	}
-
+	RegisterComponents();
+	RegisterSystems();
 
 	Entity e = admin->CreateEntity();
 	admin->AddComponent(e, Writer{"weewjkfdls"});
@@ -40,8 +37,7 @@ int main()
 
 	while (true)
 	{
-		writerSystem->Update();
-		playerSystem->Update();
+		admin->Update();
 	}
 
 	return 0;

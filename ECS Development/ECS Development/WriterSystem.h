@@ -5,6 +5,6 @@
 class WriterSystem : public System
 {
 public:
-	void Init();
-	void Update();
+	void Init() override;
+	void Update() override;
 };
