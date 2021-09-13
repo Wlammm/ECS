@@ -24,6 +24,25 @@ public:
 	}
 
 	template<typename T>
+	T& RegisterSingletonComponent()
+	{
+		std::string typeName = typeid(T).name();
+
+		assert(myComponentTypes.find(typeName) == myComponentTypes.end() && "Component type already registered.");
+
+		myComponentTypes.insert({ typeName, myNextComponentType });
+		myComponentArrays.insert({ typeName, std::make_shared<ComponentArray<T>>() });
+
+		mySingletonComponents.emplace_back(myNextComponentType);
+		++myNextComponentType;
+
+		T t = T{};
+		AddComponent(SINGLETON_COMPONENT_INDEX, t);
+
+		return GetComponent<T>(SINGLETON_COMPONENT_INDEX);
+	}
+
+	template<typename T>
 	ComponentType GetComponentType()
 	{
 		std::string typeName = typeid(T).name();
@@ -40,6 +59,13 @@ public:
 	}
 
 	template<typename T>
+	bool IsSingletonComponent()
+	{
+		ComponentType type = GetComponentType<T>();
+		return (std::find(mySingletonComponents.begin(), mySingletonComponents.end(), type) != mySingletonComponents.end());
+	}
+
+	template<typename T>
 	void RemoveComponent(Entity anEntity)
 	{
 		GetComponentArray<T>()->Removedata(anEntity);
@@ -48,6 +74,12 @@ public:
 	template<typename T>
 	T& GetComponent(Entity anEntity)
 	{
+		ComponentType type = GetComponentType<T>();
+		if (std::find(mySingletonComponents.begin(), mySingletonComponents.end(), type) != mySingletonComponents.end())
+		{
+			return GetComponentArray<T>()->GetData(SINGLETON_COMPONENT_INDEX);
+		}
+
 		return GetComponentArray<T>()->GetData(anEntity);
 	}
 
@@ -64,7 +96,8 @@ public:
 private:
 	std::unordered_map<std::string, ComponentType> myComponentTypes{};
 	std::unordered_map<std::string, std::shared_ptr<IComponentArray>> myComponentArrays{};
-	ComponentType myNextComponentType{};
+	std::vector<ComponentType> mySingletonComponents;
+	ComponentType myNextComponentType{ 1 };
 
 	template<typename T>
 	std::shared_ptr<ComponentArray<T>> GetComponentArray()

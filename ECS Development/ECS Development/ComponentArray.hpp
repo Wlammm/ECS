@@ -1,5 +1,4 @@
 #pragma once
-
 #include <assert.h>
 #include <array>
 #include <unordered_map>

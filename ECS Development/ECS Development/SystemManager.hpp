@@ -19,7 +19,7 @@ public:
 
 		T* system = new T();
 		mySystems.insert({ typeName, system });
-		
+
 		system->Init();
 
 		return system;

@@ -1,2 +1,9 @@
-﻿  Main.cpp
-  ECS Development.vcxproj -> C:\Users\william.arnback\Documents\GitHub\ECS\ECS Development\x64\Debug\ECS Development.exe
+﻿  ECSAdmin.cpp
+C:\Users\willi\Documents\GitHub\Engine\ECS\ECS Development\ECS Development\ECSAdmin.cpp(1,10): fatal error C1083: Cannot open include file: 'pch.h': No such file or directory
+  Main.cpp
+  PlayerSystem.cpp
+  WriterSystem.cpp
+  Generating Code...
+C:\Users\willi\Documents\GitHub\Engine\ECS\ECS Development\ECS Development\ECSAdmin.hpp(12): error C4716: 'ECSAdmin::GetInstance': must return a value
+C:\Users\willi\Documents\GitHub\Engine\ECS\ECS Development\ECS Development\ECSAdmin.hpp(12): error C4716: 'ECSAdmin::GetInstance': must return a value
+C:\Users\willi\Documents\GitHub\Engine\ECS\ECS Development\ECS Development\ECSAdmin.hpp(12): error C4716: 'ECSAdmin::GetInstance': must return a value

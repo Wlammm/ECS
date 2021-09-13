@@ -12,49 +12,28 @@ public:
 		return ourInstance;
 	}
 
-	ECSAdmin()
-	{
-		ourInstance = this;
-	}
+	ECSAdmin() = default;
 
-	~ECSAdmin()
-	{
-		delete myComponentManager;
-		myComponentManager = nullptr;
+	~ECSAdmin();
 
-		delete myEntityManager;
-		myEntityManager = nullptr;
+	void Init();
 
-		delete mySystemManager;
-		mySystemManager = nullptr;
-	}
+	Entity CreateEntity();
 
-	void Init()
-	{
-		myComponentManager = new ComponentManager();
-		myEntityManager = new EntityManager();
-		mySystemManager = new SystemManager();
+	void DestroyEntity(Entity anEntity);
 
-		ourInstance = this;
-	}
-
-	Entity CreateEntity()
-	{
-		return myEntityManager->CreateEntity();
-	}
-
-	void DestroyEntity(Entity anEntity)
-	{
-		myEntityManager->DestroyEntity(anEntity);
-
-		myComponentManager->EntityDestroyed(anEntity);
-	}
-
+	void Update();
 
 	template<typename T>
 	void RegisterComponent()
 	{
 		myComponentManager->RegisterComponent<T>();
+	}
+
+	template<typename T>
+	T* RegisterSingletonComponent()
+	{
+		return myComponentManager->RegisterSingletonComponent<T>();
 	}
 
 	template<typename T>
@@ -70,9 +49,27 @@ public:
 	}
 
 	template<typename T>
+	void AddSingletonComponent(Entity anEntity)
+	{
+		if (myComponentManager->IsSingletonComponent<T>())
+		{
+			auto signature = myEntityManager->GetSignature(anEntity);
+			signature.set(myComponentManager->GetComponentType<T>(), true);
+			myEntityManager->SetSignature(anEntity, signature);
+
+			mySystemManager->EntitySignatureChanged(anEntity, signature);
+		}
+
+		assert(false && "Component is not a singleton component or not yet registered!");
+	}
+
+	template<typename T>
 	void RemoveComponent(Entity anEntity)
 	{
-		myComponentManager->RemoveComponent<T>(anEntity);
+		if (!myComponentManager->IsSingletonComponent<T>())
+		{
+			myComponentManager->RemoveComponent<T>(anEntity);
+		}
 
 		auto signature = myEntityManager->GetSignature(anEntity);
 		signature.set(myComponentManager->GetComponentType<T>(), false);
@@ -104,8 +101,6 @@ public:
 	{
 		mySystemManager->SetSignature<T>(aSignature);
 	}
-
-	void Update();
 
 private:
 	static ECSAdmin* ourInstance;
